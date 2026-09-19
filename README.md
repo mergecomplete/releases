@@ -1,19 +1,18 @@
 # mergecomplete releases
 
-Every build of the [mergecomplete](https://mergecomplete.com) runner is signed with an ed25519 key
-the app doesn't hold, and the runner installs a build only when that signature checks against the
-key compiled into it. This repository publishes what the signature covers: each build's SHA-256,
-the signature itself, and the public key.
+For security, every build of the [mergecomplete](https://mergecomplete.com) **runner** is signed with an `ed25519` key
+the app doesn't hold. The runner checks that signature before it installs anything, so an update is
+always a build we signed.
 
-So you can check a download against something mergecomplete doesn't serve. You never have to — the
-runner installs and updates itself without any of this. It's here for anyone who'd rather check.
+The public key and each build's SHA-256 are published here, so you can verify your first download, or
+any update after it, for yourself.
 
 ## What's here
 
-| | |
+| File | What it is |
 |---|---|
-| `releases/<version>.json` | One manifest per runner version. Its history is the record: a change to a past release shows in the log |
-| `mergecomplete-release.pub.pem` | The key releases are signed with. The copy that decides anything is the one compiled into the runner |
+| `releases/<version>.json` | One manifest per runner version: each build's SHA-256, the signature, and the key it was signed with |
+| `mergecomplete-release.pub.pem` | That same public key, as PEM, which is the form `openssl` reads |
 
 A version names the commit that built it, so the same version is always the same bytes.
 `mergecomplete version` prints the one you're running.
@@ -28,24 +27,20 @@ curl -fsSL -o mergecomplete-darwin-arm64 \
 shasum -a 256 mergecomplete-darwin-arm64
 ```
 
-Then compare that with the same platform's line here:
+The platforms are `darwin-arm64`, `darwin-amd64`, `linux-arm64` and `linux-amd64`.
+
+Then compare that checksum with the same platform's line here:
 
 ```sh
 jq -r '.builds["darwin-arm64"].sha256' releases/<version>.json
 ```
 
-The platforms are `darwin-arm64`, `darwin-amd64`, `linux-arm64` and `linux-amd64`.
-
-This is the check worth running. The binary came from the app and the checksum came from GitHub, so
-the two have to agree.
+The two should match.
 
 ## Checking the signature
 
-`release` in a manifest is the release exactly as the app serves it — the version, the protocol and
-every build's SHA-256, on the one line the signature covers.
-
-Verifying ed25519 takes OpenSSL 3. Most Linux distributions ship it; on macOS `/usr/bin/openssl` is
-LibreSSL, and `brew install openssl` gives you one that can.
+Verifying `ed25519` takes OpenSSL 3. Most Linux distributions ship it. macOS doesn't: `/usr/bin/openssl`
+is LibreSSL, so install OpenSSL 3 with `brew install openssl`.
 
 ```sh
 jq -rj .release releases/<version>.json > release.json
@@ -54,16 +49,15 @@ openssl pkeyutl -verify -pubin -inkey mergecomplete-release.pub.pem \
   -rawin -in release.json -sigfile release.sig
 ```
 
-`Signature Verified Successfully` means this key signed that release. The runner you downloaded
-carries the same key, which you can see for yourself:
+`Signature Verified Successfully` means we signed that release. The signature covers everything in it:
+the version, the protocol, and every build's SHA-256.
+
+The runner checks updates against that same key, compiled into its binary. You can see it there:
 
 ```sh
 grep -aqF "$(jq -r .key releases/<version>.json)" mergecomplete-darwin-arm64 &&
   echo "this build carries that key"
 ```
-
-That's the whole chain. Whoever can change what the app serves still can't choose what runs on your
-machine.
 
 ## Where the runner comes from
 
