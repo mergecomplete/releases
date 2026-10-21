@@ -1,0 +1,21 @@
+{
+  "version": "a70dead",
+  "protocol": 4,
+  "builds": {
+    "darwin-amd64": {
+      "sha256": "612264f16a87c281818fae91f59fa74d565739b23426b216a5db08c6b633a477"
+    },
+    "darwin-arm64": {
+      "sha256": "0da568d232bf32a9966b05589e05833522d7736a55ad8ac18a4103783a42010b"
+    },
+    "linux-amd64": {
+      "sha256": "7fd69c76925841839f929a463b4e1591fc0209801f3e82485fd3486b64e4ce41"
+    },
+    "linux-arm64": {
+      "sha256": "6ca22ae253c6a45c87d585b709413556bcbe90ef1a76830e8b7fca3fe5cc05b1"
+    }
+  },
+  "key": "hYnGYl+Z6gvSJBVFxYHNWfiz00QsOLx87bUd2wJaxNc=",
+  "signature": "1SZK7HV0XT/e40PF3RMoaCEAGKsqACtnr7K3hzu6B00dRTFCYgUC550oCmqfSAmADtTbibgTmGVJ6hLz22k3Bg==",
+  "release": "{\"version\":\"a70dead\",\"protocol\":4,\"builds\":{\"darwin-amd64\":{\"sha256\":\"612264f16a87c281818fae91f59fa74d565739b23426b216a5db08c6b633a477\"},\"darwin-arm64\":{\"sha256\":\"0da568d232bf32a9966b05589e05833522d7736a55ad8ac18a4103783a42010b\"},\"linux-amd64\":{\"sha256\":\"7fd69c76925841839f929a463b4e1591fc0209801f3e82485fd3486b64e4ce41\"},\"linux-arm64\":{\"sha256\":\"6ca22ae253c6a45c87d585b709413556bcbe90ef1a76830e8b7fca3fe5cc05b1\"}}}"
+}
